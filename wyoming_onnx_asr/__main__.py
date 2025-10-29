@@ -21,6 +21,7 @@ async def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--model-en", help="English model name")
     parser.add_argument("--model-multilingual", help="Multilingual model name")
+    parser.add_argument("--model-path", help="Path to directory containing models")
     parser.add_argument(
         "-q", "--quantization", help="Model quantization ('int8' for example)"
     )
@@ -52,6 +53,7 @@ async def main() -> None:
     # Store resolved values in local variables
     eng_model_name = args.model_en
     multi_model_name = args.model_multilingual
+    model_path = args.model_path
 
     logging.basicConfig(
         level=logging.DEBUG if args.debug else logging.INFO, format=args.log_format
@@ -135,6 +137,7 @@ async def main() -> None:
         try:
             eng_model = onnx_asr.load_model(
                 model=eng_model_name,
+                path=model_path,
                 providers=providers,
                 sess_options=session_options,
                 quantization=args.quantization,
@@ -156,6 +159,7 @@ async def main() -> None:
         try:
             multi_model = onnx_asr.load_model(
                 model=multi_model_name,
+                path=model_path,
                 providers=providers,
                 sess_options=session_options,
                 quantization=args.quantization,
